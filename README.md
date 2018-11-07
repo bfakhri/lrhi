@@ -16,6 +16,7 @@ time
 # Usage Example - Drawing Zeros to LRHD
 
 from lrhd import lrhd
+
 hap_disp = lrhd()
 
 dims = (hap_disp.y_dim, hap_disp.x_dim)
