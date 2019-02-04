@@ -24,3 +24,15 @@ dims = (hap_disp.y_dim, hap_disp.x_dim)
 image = np.zeros(dims, np.uint8)
 
 hap_disp.draw(image)
+
+# LRHI
+
+### LRHI Block Diagram
+![alt text](https://github.com/bfakhri/lrhi/blob/master/images/lrhd_block_diag_colored.png "Low Res Haptic Interface Block Diagram")
+
+### Low-Res Haptic Display
+![alt text](https://github.com/bfakhri/lrhi/blob/master/images/front_chair.jpg "Low Res Haptic Display")
+
+### Low-Res Haptic Display Side View 
+![alt text](https://github.com/bfakhri/lrhi/blob/master/images/array_side.png "Low Res Haptic Display")
+
