@@ -2,7 +2,10 @@
 
 Simple API for communicating with the LRHI to draw images onto the Low Resolution Haptic Display (LRHD). 
 
-# Requirements
+### LRHI Block Diagram
+![alt text](https://github.com/bfakhri/lrhi/blob/master/images/lrhd_block_diag_colored.png "Low Res Haptic Interface Block Diagram")
+
+# Software Requirements
 
 Python3 
 
@@ -27,8 +30,6 @@ hap_disp.draw(image)
 
 # LRHI
 
-### LRHI Block Diagram
-![alt text](https://github.com/bfakhri/lrhi/blob/master/images/lrhd_block_diag_colored.png "Low Res Haptic Interface Block Diagram")
 
 ### Low-Res Haptic Display
 ![alt text](https://github.com/bfakhri/lrhi/blob/master/images/front_chair.jpg "Low Res Haptic Display")
