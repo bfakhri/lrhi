@@ -26,6 +26,19 @@ class lrhd():
         # Locking Mechanism for Threading
         self.lock = Lock()
 
+    def warmup(self, times=4):
+        ' Warms up the serial connection ' 
+
+        for i in range(times):
+            img = np.ones((self.y_dim, self.x_dim), np.uint8)
+            self.draw(img)
+            time.sleep(0.4)
+            print('warming up')
+
+        self.clear_display()
+
+        print('Done warming up')
+
     def ltr_procedure(self, delay=0.25, speed_str=None):
         if(speed_str == 'fast'):
             delay = delay*self.fast_rate
@@ -161,45 +174,81 @@ class lrhd():
 
             
 
-    def draw(self, hw_img):
+    #def draw(self, hw_img):
+    #    'Draws the various image version to screen and hardware'
+    #    # Make sure hw_img is a uint8
+    #    if(hw_img.dtype != np.uint8):
+    #        print('Wrong format - must be np.uint8')
+    #        return 0
+
+    #    # Scale and reverse image for hardware
+    #    hw_img_scaled = interp(hw_img, [0,255], [0, 254])
+
+
+    #    # Send the image to hardware!
+    #    #print('Sending Image to Hardware: ')
+    #    for x in range(self.x_dim):
+    #        for y in range(self.y_dim):
+    #            #print('Sending: ', str(x), str(y), str(int(hw_img_scaled[x,y])))
+    #            if(not self.lock.locked()):
+    #                self.lock.acquire()
+    #                try:
+    #                    self.ser.write(struct.pack('>B', int(hw_img_scaled[x,y])))
+    #                except serial.serialutil.SerialTimeoutException:
+    #                    if(self.verbose):
+    #                        print('Send Failure!')
+    #                        print('Flushing')
+    #                    self.ser.flushInput()
+    #                self.lock.release()
+    #            else:
+    #                print("LOCK ALREADY ACQUIRED!")
+    #    try:
+    #        self.ser.write(struct.pack('>B', int(255)))
+    #    except serial.serialutil.SerialTimeoutException:
+    #        if(self.verbose):
+    #            print('Send Failure!')
+    #            print('Flushing')
+    #        self.ser.flushInput()
+    #            
+    #    # Wait so images open
+    #    cv2.waitKey(1)
+
+    def draw(self, img):
         'Draws the various image version to screen and hardware'
-        # Make sure hw_img is a uint8
-        if(hw_img.dtype != np.uint8):
-            print('Wrong format - must be np.uint8')
-            return 0
+
+        # Draw rectangle on original image to screen
+        big_img = img.copy()
+        cv2.imshow('image', big_img)
 
         # Scale and reverse image for hardware
-        hw_img_scaled = interp(hw_img, [0,255], [0, 254])
-
+        hw_img_scaled = interp(img, [0,255], [0, 254])
 
         # Send the image to hardware!
-        #print('Sending Image to Hardware: ')
+        print('Sending Image to Hardware: ')
         for x in range(self.x_dim):
             for y in range(self.y_dim):
-                #print('Sending: ', str(x), str(y), str(int(hw_img_scaled[x,y])))
+                print('Sending: ', str(x), str(y), str(int(hw_img_scaled[x,y])))
                 if(not self.lock.locked()):
                     self.lock.acquire()
                     try:
                         self.ser.write(struct.pack('>B', int(hw_img_scaled[x,y])))
                     except serial.serialutil.SerialTimeoutException:
-                        if(self.verbose):
-                            print('Send Failure!')
-                            print('Flushing')
+                        print('Send Failure!')
                         self.ser.flushInput()
+                        print('Flushed()')
                     self.lock.release()
                 else:
                     print("LOCK ALREADY ACQUIRED!")
         try:
             self.ser.write(struct.pack('>B', int(255)))
+            print("RESTART at 0")
         except serial.serialutil.SerialTimeoutException:
-            if(self.verbose):
-                print('Send Failure!')
-                print('Flushing')
+            print('Send Failure!')
             self.ser.flushInput()
+            print('Flushed()')
                 
         # Wait so images open
         cv2.waitKey(1)
-
 
 
 
